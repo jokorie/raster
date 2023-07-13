@@ -60,6 +60,7 @@ let swap_regions
 let transform image ~moves ~width ~height =
   let max_region_x_index = Image.width image / width in
   let max_region_y_index = Image.height image / height in
+  let mosaic_image = Blur.transform image ~radius:2 in
   (* maybe copy the image?*)
   let rec mosaic ~moves ~image =
     match moves with
@@ -117,7 +118,7 @@ let transform image ~moves ~width ~height =
         ~height;
       mosaic ~moves:(moves - 1) ~image
   in
-  mosaic ~image ~moves
+  mosaic ~image:mosaic_image ~moves
 ;;
 
 let command =
@@ -134,7 +135,7 @@ let command =
         let image =
           transform
             (Image.load_ppm ~filename)
-            ~moves:5000
+            ~moves:20000
             ~width:5
             ~height:5
         in
